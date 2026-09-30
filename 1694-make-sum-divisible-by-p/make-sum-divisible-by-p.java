@@ -1,48 +1,47 @@
 import java.util.HashMap;
 
 class Solution {
+
     public int minSubarray(int[] nums, int p) {
 
         long total = 0;
 
-        for (int i = 0; i < nums.length; i++) {
-            total = total + nums[i];
+        for (int n : nums) {
+            total += n;
         }
 
-        long remainder = total % p;
-
-        if (remainder == 0) {
+        if (total % p == 0) {
             return 0;
         }
 
-        HashMap<Long, Integer> map = new HashMap<>();
-
-        map.put(0L, -1);
-
         long sum = 0;
-        int answer = nums.length;
+        int ans = nums.length;
+        long rem = total % p;
+
+        HashMap<Long, Integer> a = new HashMap<>();
+
+        a.put(0L, -1);
 
         for (int i = 0; i < nums.length; i++) {
 
             sum = (sum + nums[i]) % p;
 
-            long needed = (sum - remainder + p) % p;
+            long need = (sum - rem + p) % p;
 
-            if (map.containsKey(needed)) {
-                int length = i - map.get(needed);
+            if (a.containsKey(need)) {
 
-                if (length < answer) {
-                    answer = length;
-                }
+                int l = i - a.get(need);
+
+                ans = Math.min(ans, l);
             }
 
-            map.put(sum, i);
+            a.put(sum, i);
         }
 
-        if (answer == nums.length) {
+        if (ans == nums.length) {
             return -1;
         }
 
-        return answer;
+        return ans;
     }
 }
